@@ -1,0 +1,11 @@
+SET FOREIGN_KEY_CHECKS=0;
+truncate table app_categoria;
+truncate table app_categoria_subcategoria;
+truncate table app_marca;
+truncate table app_subcategoria;
+truncate table app_solicitante;
+truncate table app_solicitud;
+truncate table app_producto;
+truncate table app_solicitud_producto;
+truncate table app_solicitud_solicitante;
+SET FOREIGN_KEY_CHECKS=1;
