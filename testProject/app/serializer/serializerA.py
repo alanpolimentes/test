@@ -27,3 +27,17 @@ class SolicitudSerializer(serializers.ModelSerializer):
     class Meta:
         model = Solicitud
         fields = '__all__'
+
+
+class ExtraSerializer(serializers.Serializer):
+    total = serializers.IntegerField
+    products = serializers.DictField
+
+
+class ResponseSerializer(serializers.Serializer):
+    sol = SolicitudSerializer
+
+    class Meta:
+        fields = '__all__'
+    # brief = serializers.DictField
+    # total = serializers.IntegerField

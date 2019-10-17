@@ -9,3 +9,7 @@ truncate table app_producto;
 truncate table app_solicitud_producto;
 truncate table app_solicitud_solicitante;
 SET FOREIGN_KEY_CHECKS=1;
+
+
+
+curl -i -X POST -H 'Content-Type: application/json' -d '{"id": "9"}' http://localhost:8000/user/

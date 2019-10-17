@@ -8,6 +8,7 @@ from app.classTest.test import *
 from app.models import *
 from app.manager import *
 import random
+from django.core.mail import send_mail
 from rest_framework import viewsets
 
 
@@ -41,15 +42,32 @@ class specificUser(APIView):
 
     def get(self, request, *args, **kwargs):
         id = kwargs['id']
+        man = manager(id)
+        calculated_data = man.calculateTotalSolicitud()
+        solicitud_data = Solicitud.objects.get(id=id)
+        name = solicitud_data.solicitante.all()[0].nombre
+        print(name)
+        print(calculated_data)
+        serializer = SolicitudSerializer(solicitud_data)
+        serializer2 = ExtraSerializer(calculated_data)
+        send_mail(
+            'Email Django',
+            'Gracias! ' + name,
+            'testemaildjangopoli@gmail.com',
+            ['testemaildjangopoli@gmail.com'],
+        )
+        return Response(serializer.data)
+
+    def post(self, request, *args, **kwargs):
+        id = request.data.get('id')
+        print('success')
         print(id)
         man = manager(id)
         calculated_data = man.calculateTotalSolicitud()
-        print(calculated_data)
         solicitud_data = Solicitud.objects.get(id=id)
+        print(calculated_data)
         serializer = SolicitudSerializer(solicitud_data)
-
         return Response(serializer.data)
-    # def post(self, request, *args, **kwargs):
 
 
 class pushData(TemplateView):

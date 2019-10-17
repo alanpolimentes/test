@@ -6,6 +6,7 @@ urlpatterns = [
     path('firstPetition/', views.firstPetition.as_view(), name='test'),
     path('users/', views.allUsers.as_view(), name='all'),
     # path('users/<uuid:id>/', views.specificUser.as_view(), name='specific'),
-    path('users/<int:id>/', views.specificUser.as_view(), name='specific'),
+    path('user/<int:id>/', views.specificUser.as_view(), name='specificGet'),
+    path('user/', views.specificUser.as_view(), name='specificPost'),
 
 ]
