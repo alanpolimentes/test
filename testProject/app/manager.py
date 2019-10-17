@@ -9,9 +9,11 @@ class manager:
         self.id = id
 
     def calculateTotalSolicitud(self):
-        solicitud = Solicitud.objects.get(pk=self.id)
-        if Solicitud is None:
-            return {}
+        try:
+            solicitud = Solicitud.objects.get(pk=self.id)
+        except Exception as e:
+            print(e)
+            return None
         products = solicitud.producto.all()
         solicitante = solicitud.solicitante.all()[0]
         dict_products = {'prods': {}, 'total': 0, 'user': {'correo': solicitante.correo, 'nombre': solicitante.nombre}}

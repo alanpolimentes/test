@@ -43,6 +43,8 @@ class specificUser(APIView):
             raise Http404
         man = manager(id)
         calculated_data = man.calculateTotalSolicitud()
+        if calculated_data is None:
+            raise Http404
         name = calculated_data['user']['nombre']
         email = calculated_data['user']['correo']
         serializer = ResponseSolicitudSerializer(data={'solicitud': calculated_data})
@@ -61,6 +63,8 @@ class specificUser(APIView):
         if id is None:
             raise Http404
         calculated_data = man.calculateTotalSolicitud()
+        if calculated_data is None:
+            raise Http404
         name = calculated_data['user']['nombre']
         email = calculated_data['user']['correo']
         serializer = ResponseSolicitudSerializer(data={'solicitud': calculated_data})
