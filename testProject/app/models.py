@@ -35,4 +35,4 @@ class Solicitante(models.Model):
 class Solicitud(models.Model):
     solicitante = models.ManyToManyField(Solicitante)
     producto = models.ManyToManyField(Producto)
-    cantidad = models.IntegerField(default=0)
+    cantidad = models.CharField(max_length=100)

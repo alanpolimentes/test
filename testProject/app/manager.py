@@ -9,23 +9,29 @@ class manager:
         self.id = id
 
     def calculateTotalSolicitud(self):
-        solicitud = Solicitud(id=self.id)
+        solicitud = Solicitud.objects.get(pk=self.id)
         if Solicitud is None:
             return {}
         products = solicitud.producto.all()
         solicitante = solicitud.solicitante.all()[0]
         dict_products = {'prods': {}, 'total': 0, 'user': {'correo': solicitante.correo, 'nombre': solicitante.nombre}}
-
+        split_cantidad = solicitud.cantidad.split(',')
+        key_val = {}
+        for values in split_cantidad:
+            if len(values) == 0:
+                continue
+            split_value = values.split(':')
+            key_val[split_value[0]] = split_value[1]
+        print(key_val)
         for product in products:
             if product.nombre not in dict_products['prods']:
                 dict_products['prods'][product.nombre] = {}
-                dict_products['prods'][product.nombre]['count'] = 0
-                dict_products['prods'][product.nombre]['subtotal'] = 0
+                dict_products['prods'][product.nombre]['count'] = int(key_val[product.nombre])
+                dict_products['prods'][product.nombre]['subtotal'] = int(key_val[product.nombre]) * product.precio
                 dict_products['prods'][product.nombre]['subcategoria'] = product.subcategoria.nombre
+                dict_products['prods'][product.nombre]['precio'] = product.precio
+                dict_products['total'] = dict_products['total'] + dict_products['prods'][product.nombre]['subtotal']
 
-            dict_products['prods'][product.nombre]['count'] = dict_products['prods'][product.nombre]['count'] + 1
-            dict_products['prods'][product.nombre]['subtotal'] = dict_products['prods'][product.nombre]['subtotal'] + product.precio
-            dict_products['total'] = dict_products['total'] + product.precio
         return dict_products
 
 

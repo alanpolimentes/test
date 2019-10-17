@@ -49,7 +49,7 @@ class specificUser(APIView):
         serializer.is_valid()
         send_mail(
             'Email Django',
-            'Gracias! ' + name,
+            'Gracias! ' + name + 'el costo es de ' + str(calculated_data['total']),
             'testemaildjangopoli@gmail.com',
             ['testemaildjangopoli@gmail.com'],
         )
@@ -136,12 +136,7 @@ class pushData(TemplateView):
             print(value_marca)
             list_model_marcas.append(value_marca)
         print('marcas ingresadas')
-        count = 0
         for prod in test_values_productos:
-            print('id', count)
-            print('a-', list_model_marcas[count])
-            print('c-', dict_model_subcategorias[prod['sub']])
-            print('d-', prod)
             index_marca = random.randint(0, 8)
             producto = Producto(
                 id=uuid.uuid4(),
@@ -155,7 +150,7 @@ class pushData(TemplateView):
         for sol in test_values_solicitante:
             solicitante = Solicitante(id=uuid.uuid4(), nombre=sol['nombre'], correo=sol['correo'])
             solicitante.save()
-            solicitud = Solicitud(cantidad=8)
+            solicitud = Solicitud(cantidad='8')
             solicitud.save()
             solicitud.producto.add(list_model_productos[random.randint(0, 7)])
             solicitud.producto.add(list_model_productos[random.randint(0, 7)])
@@ -164,6 +159,10 @@ class pushData(TemplateView):
             solicitud.producto.add(list_model_productos[random.randint(0, 7)])
             solicitud.producto.add(list_model_productos[random.randint(0, 7)])
             solicitud.solicitante.add(solicitante)
+            str_cant = ''
+            for product in solicitud.producto.all():
+                str_cant = str_cant + product.nombre + ':' + str(random.randint(0, 5)) + ','
+            solicitud.cantidad = str_cant
             solicitud.save()
 
         return render(request, template_name='index.html')

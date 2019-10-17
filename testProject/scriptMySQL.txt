@@ -1,6 +1,5 @@
 SET FOREIGN_KEY_CHECKS=0;
 truncate table app_categoria;
-truncate table app_categoria_subcategoria;
 truncate table app_marca;
 truncate table app_subcategoria;
 truncate table app_solicitante;
