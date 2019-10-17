@@ -8,5 +8,6 @@ urlpatterns = [
     # path('users/<uuid:id>/', views.specificUser.as_view(), name='specific'),
     path('user/<int:id>/', views.specificUser.as_view(), name='specificGet'),
     path('user/', views.specificUser.as_view(), name='specificPost'),
+    path('products/', views.AllProducts.as_view(), name='AllProducts'),
 
 ]

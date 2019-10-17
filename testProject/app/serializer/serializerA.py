@@ -29,15 +29,15 @@ class SolicitudSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ExtraSerializer(serializers.Serializer):
-    total = serializers.IntegerField
-    products = serializers.DictField
-
-
-class ResponseSerializer(serializers.Serializer):
-    sol = SolicitudSerializer
+class ResponseSolicitudSerializer(serializers.Serializer):
+    solicitud = serializers.DictField()
 
     class Meta:
         fields = '__all__'
-    # brief = serializers.DictField
-    # total = serializers.IntegerField
+
+
+class ResponseGruopSerializer(serializers.Serializer):
+    produtos = serializers.DictField()
+
+    class Meta:
+        fields = '__all__'

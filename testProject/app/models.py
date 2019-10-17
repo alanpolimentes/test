@@ -22,8 +22,8 @@ class Producto(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=50)
     precio = models.IntegerField()
-    marca = models.OneToOneField(Marca, on_delete=models.CASCADE)
-    subcategoria = models.OneToOneField(Subcategoria, on_delete=models.CASCADE)
+    marca = models.OneToOneField(Marca, on_delete=models.CASCADE, unique=False)
+    subcategoria = models.OneToOneField(Subcategoria, on_delete=models.CASCADE, unique=False)
 
 
 class Solicitante(models.Model):
@@ -35,3 +35,4 @@ class Solicitante(models.Model):
 class Solicitud(models.Model):
     solicitante = models.ManyToManyField(Solicitante)
     producto = models.ManyToManyField(Producto)
+    cantidad = models.IntegerField(default=0)

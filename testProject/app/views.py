@@ -1,16 +1,13 @@
 from django.shortcuts import render
-import uuid
 from rest_framework.response import Response
 from django.views.generic import TemplateView
 from rest_framework.views import APIView
 from app.serializer.serializerA import *
 from app.classTest.test import *
-from app.models import *
 from app.manager import *
 import random
 from django.core.mail import send_mail
-from rest_framework import viewsets
-
+from django.http import Http404
 
 class Hi(TemplateView):
 
@@ -42,14 +39,14 @@ class specificUser(APIView):
 
     def get(self, request, *args, **kwargs):
         id = kwargs['id']
+        if id is None:
+            raise Http404
         man = manager(id)
         calculated_data = man.calculateTotalSolicitud()
-        solicitud_data = Solicitud.objects.get(id=id)
-        name = solicitud_data.solicitante.all()[0].nombre
-        print(name)
-        print(calculated_data)
-        serializer = SolicitudSerializer(solicitud_data)
-        serializer2 = ExtraSerializer(calculated_data)
+        name = calculated_data['user']['nombre']
+        email = calculated_data['user']['correo']
+        serializer = ResponseSolicitudSerializer(data={'solicitud': calculated_data})
+        serializer.is_valid()
         send_mail(
             'Email Django',
             'Gracias! ' + name,
@@ -60,13 +57,29 @@ class specificUser(APIView):
 
     def post(self, request, *args, **kwargs):
         id = request.data.get('id')
-        print('success')
-        print(id)
         man = manager(id)
+        if id is None:
+            raise Http404
         calculated_data = man.calculateTotalSolicitud()
-        solicitud_data = Solicitud.objects.get(id=id)
-        print(calculated_data)
-        serializer = SolicitudSerializer(solicitud_data)
+        name = calculated_data['user']['nombre']
+        email = calculated_data['user']['correo']
+        serializer = ResponseSolicitudSerializer(data={'solicitud': calculated_data})
+        serializer.is_valid()
+        send_mail(
+            'Email Django',
+            'Gracias! ' + name,
+            'testemaildjangopoli@gmail.com',
+            ['testemaildjangopoli@gmail.com'],
+        )
+        return Response(serializer.data)
+
+
+class AllProducts(APIView):
+
+    def get(self, request, *args, **kwargs):
+        values = getProductsbyCat()
+        serializer = ResponseGruopSerializer(data={'produtos': values})
+        serializer.is_valid()
         return Response(serializer.data)
 
 
@@ -99,8 +112,8 @@ class pushData(TemplateView):
             # {'prod': 'volante', 'sub': 'accesorios', 'precio': 600},
             # {'prod': 'adorno', 'sub': 'accesorios', 'precio': 600},
             {'prod': 'sopa', 'sub': 'enlatado', 'precio': 8},
-            {'prod': 'ps4', 'sub': 'consolas', 'precio': 8000},
-            # {'prod': 'xbox', 'sub': 'consolas', 'precio': 8000},
+            # {'prod': 'ps4', 'sub': 'consolas', 'precio': 8000},
+            {'prod': 'xbox', 'sub': 'consolas', 'precio': 8000},
         ]
 
         dict_model_subcategorias = {}
@@ -133,7 +146,7 @@ class pushData(TemplateView):
                 nombre=prod['prod'],
                 marca=list_model_marcas[count],
                 subcategoria=dict_model_subcategorias[prod['sub']],
-                precio=prod['precio']
+                precio=prod['precio'],
             )
             producto.save()
             count = count + 1
@@ -141,11 +154,15 @@ class pushData(TemplateView):
         for sol in test_values_solicitante:
             solicitante = Solicitante(id=uuid.uuid4(), nombre=sol['nombre'], correo=sol['correo'])
             solicitante.save()
-            solicitud = Solicitud()
+            solicitud = Solicitud(cantidad=8)
             solicitud.save()
             solicitud.producto.add(list_model_productos[random.randint(0, 4)])
             solicitud.producto.add(list_model_productos[random.randint(0, 4)])
             solicitud.producto.add(list_model_productos[random.randint(0, 4)])
+            solicitud.producto.add(list_model_productos[random.randint(0, 4)])
+            solicitud.producto.add(list_model_productos[random.randint(0, 4)])
+            solicitud.producto.add(list_model_productos[random.randint(0, 4)])
             solicitud.solicitante.add(solicitante)
+            solicitud.save()
 
         return render(request, template_name='index.html')
