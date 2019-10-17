@@ -93,7 +93,7 @@ class pushData(TemplateView):
                 {'name': 'ropa', 'subcat': ['pantalon', 'camisa', 'blusa']},
                 {'name': 'autos', 'subcat': ['refacciones', 'enfriadores', 'accesorios']},
         ]
-        test_values_marcas = ['marca1', 'marca2', 'marca3', 'marca4', 'marca5', 'marca6', 'marca7', 'marca8', 'marca9', 'marca10']
+        test_values_marcas = ['marca1', 'marca2', 'marca3', 'marca4', 'marca5', 'marca6', 'marca7','marca9','marca10','marca11', ]
         test_values_solicitante = [{
             'nombre': 'usuario1',
             'correo': 'usuario1@correo.com'
@@ -125,7 +125,9 @@ class pushData(TemplateView):
             for sub in categoria['subcat']:
                 test_subcategoria = Subcategoria(id=uuid.uuid4(), nombre=sub, categoria=test_categorias)
                 test_subcategoria.save()
+                # test_categorias.subcategoria.add(test_subcategoria)
                 dict_model_subcategorias[sub] = test_subcategoria
+
         print('categorias ingresadas')
         print(dict_model_subcategorias)
         for marca in test_values_marcas:
@@ -140,28 +142,27 @@ class pushData(TemplateView):
             print('a-', list_model_marcas[count])
             print('c-', dict_model_subcategorias[prod['sub']])
             print('d-', prod)
+            index_marca = random.randint(0, 8)
             producto = Producto(
                 id=uuid.uuid4(),
                 nombre=prod['prod'],
-                marca=list_model_marcas[count],
+                marca=list_model_marcas[index_marca],
+                subcategoria=dict_model_subcategorias[prod['sub']],
                 precio=prod['precio'],
             )
             producto.save()
-            count = count + 1
             list_model_productos.append(producto)
-            link = Producto_Subcat(producto=producto, subctegoria=dict_model_subcategorias[prod['sub']])
-            link.save()
         for sol in test_values_solicitante:
             solicitante = Solicitante(id=uuid.uuid4(), nombre=sol['nombre'], correo=sol['correo'])
             solicitante.save()
             solicitud = Solicitud(cantidad=8)
             solicitud.save()
-            solicitud.producto.add(list_model_productos[random.randint(0, 4)])
-            solicitud.producto.add(list_model_productos[random.randint(0, 4)])
-            solicitud.producto.add(list_model_productos[random.randint(0, 4)])
-            solicitud.producto.add(list_model_productos[random.randint(0, 4)])
-            solicitud.producto.add(list_model_productos[random.randint(0, 4)])
-            solicitud.producto.add(list_model_productos[random.randint(0, 4)])
+            solicitud.producto.add(list_model_productos[random.randint(0, 7)])
+            solicitud.producto.add(list_model_productos[random.randint(0, 7)])
+            solicitud.producto.add(list_model_productos[random.randint(0, 7)])
+            solicitud.producto.add(list_model_productos[random.randint(0, 7)])
+            solicitud.producto.add(list_model_productos[random.randint(0, 7)])
+            solicitud.producto.add(list_model_productos[random.randint(0, 7)])
             solicitud.solicitante.add(solicitante)
             solicitud.save()
 
