@@ -21,7 +21,8 @@ class manager:
                 dict_products['prods'][product.nombre] = {}
                 dict_products['prods'][product.nombre]['count'] = 0
                 dict_products['prods'][product.nombre]['subtotal'] = 0
-                dict_products['prods'][product.nombre]['subcategoria'] = product.subcategoria.nombre
+                dict_products['prods'][product.nombre]['subcategoria'] = Producto_Subcat.objects.get(producto=product).subctegoria
+
             dict_products['prods'][product.nombre]['count'] = dict_products['prods'][product.nombre]['count'] + 1
             dict_products['prods'][product.nombre]['subtotal'] = dict_products['prods'][product.nombre]['subtotal'] + product.precio
             dict_products['total'] = dict_products['total'] + product.precio
@@ -37,7 +38,7 @@ def getProductsbyCat():
     all_categories = Categoria.objects.all()
     dict_result = {}
     for product in all_products:
-        categoria = product.subcategoria.categoria_set.all()[0].nombre
+        categoria = product.subcategoria.categoria.nombre
         subcategoria = product.subcategoria.nombre
         marca = product.marca.nombre
         if categoria not in dict_result:
