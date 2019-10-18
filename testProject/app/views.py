@@ -4,10 +4,13 @@ from django.views.generic import TemplateView
 from rest_framework.views import APIView
 from rest_framework import viewsets, status
 from app.serializer.serializerA import *
+from app.serializer.inputSerializer import *
 from app.classTest.test import *
 from app.manager.manager import *
 from app.manager.managerInput import *
+from app.errors import *
 import random
+import json
 from django.http import Http404
 
 
@@ -81,11 +84,27 @@ class addData(viewsets.ViewSet):
         input = ManagerInput()
         list_products = []
         for key in products_req:
-            tem_prod = input.addProduct(key)
+            tem_prod = input.addSemiRandProduct(key)
             list_products.append({'prod': tem_prod, 'amount': products_req[key]})
         solicitante = input.addUser(nombre, correo)
         input.addSolcitud(list_products, solicitante)
 
+        return Response(status=status.HTTP_200_OK)
+
+    def product(self, request, *args, **kwargs):
+        try:
+            serializer = InputProdSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+            else:
+                print(serializer.errors)
+                raise InvalidInput('Formato incorrecto', 'x')
+        except InvalidInput as e:
+            print(e, e.value)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            print(e)
+            return Response(status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_200_OK)
 
 

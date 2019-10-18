@@ -22,4 +22,6 @@ curl -i -X POST -H 'Content-Type: application/json' -d '{"nombre": "usuario4", "
 curl -i -X POST -H 'Content-Type: application/json' -d '{"nombre": "usuario4", "correo": "ususario4@correo.com", "products": { "articulo1": 4, "articulo2": 4, "articulo3": 4, "articulo4": 4, "articulo5": 4, "articulo6": 4}}' http://localhost:8000/addSolicitud/
 curl -i -X POST -H 'Content-Type: application/json' -d '{"nombre": "usuario5", "correo": "ususario5@correo.com", "products": { "articulo8": 4, "articulo2": 9, "articulo14": 4, "articulo7": 1, "articulo16": 10, "articulo6": 3}}' http://localhost:8000/addSolicitud/
 
+
+curl -i -X POST -H 'Content-Type: application/json' -d '{"nombre": "jamon", "categoria": "comida", "marca": "fud", "categoria": "comida", "subcategoria": "carnes", "precio": 20 }' http://localhost:8000/addProducto/
 "products": { "jabon": 4, "deshodornte": 4, "xbox": 8}
