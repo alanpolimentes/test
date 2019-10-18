@@ -1,6 +1,4 @@
 from app.models import *
-from app.serializer.serializerA import ProductoSerializer
-from django.forms.models import model_to_dict
 from django.core.mail import send_mail
 
 
@@ -41,14 +39,13 @@ class manager:
 def sendEmail(name, email, total):
     send_mail(
         'Email Django',
-        'Gracias! ' + name + 'el costo es de ' + str(total),
+        'Gracias! ' + name + ' el costo es de $' + str(total),
         'testemaildjangopoli@gmail.com',
         ['testemaildjangopoli@gmail.com'],
     )
 
 def getProductsbyCat():
     all_products = Producto.objects.all()
-    all_categories = Categoria.objects.all()
     dict_result = {}
     for product in all_products:
         categoria = product.subcategoria.categoria.nombre
@@ -58,10 +55,9 @@ def getProductsbyCat():
             dict_result[categoria] = {}
         if subcategoria not in dict_result[categoria]:
             dict_result[categoria][subcategoria] = {}
-        if subcategoria not in dict_result[categoria][subcategoria]:
+        if marca not in dict_result[categoria][subcategoria]:
             dict_result[categoria][subcategoria][marca] = {}
         if product.nombre not in dict_result[categoria][subcategoria][marca]:
-            dict_result[categoria][subcategoria][marca][product.nombre] = {'name': product.nombre}
-    print(dict_result)
+            dict_result[categoria][subcategoria][marca][product.nombre] = {'name': product.nombre, 'precio': product.precio}
 
     return dict_result

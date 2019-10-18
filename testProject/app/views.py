@@ -25,7 +25,7 @@ class firstPetition(APIView):
         return Response(value_ser.data)
 
 
-class allUsers(viewsets.ViewSet):
+class allSolicitudes(viewsets.ViewSet):
 
     def get(self, request, *args, **kwargs):
 
@@ -35,7 +35,7 @@ class allUsers(viewsets.ViewSet):
         return Response(serializer.data)
 
 
-class specificUser(viewsets.ViewSet):
+class specificSolicitude(viewsets.ViewSet):
 
     def get(self, request, *args, **kwargs):
         id = kwargs['id']
