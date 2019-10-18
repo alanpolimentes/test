@@ -2,10 +2,11 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from django.views.generic import TemplateView
 from rest_framework.views import APIView
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from app.serializer.serializerA import *
 from app.classTest.test import *
-from app.manager import *
+from app.manager.manager import *
+from app.manager.managerInput import *
 import random
 from django.http import Http404
 
@@ -69,6 +70,23 @@ class AllProducts(viewsets.ViewSet):
         serializer = ResponseGruopSerializer(data={'produtos': values})
         serializer.is_valid()
         return Response(serializer.data)
+
+
+class addData(viewsets.ViewSet):
+
+    def solicitud(self, request, *args, **kwargs):
+        nombre = request.data.get('nombre')
+        correo = request.data.get('correo')
+        products_req = request.data.get('products')
+        input = ManagerInput()
+        list_products = []
+        for key in products_req:
+            tem_prod = input.addProduct(key)
+            list_products.append({'prod': tem_prod, 'amount': products_req[key]})
+        solicitante = input.addUser(nombre, correo)
+        input.addSolcitud(list_products, solicitante)
+
+        return Response(status=status.HTTP_200_OK)
 
 
 class pushData(TemplateView):

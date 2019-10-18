@@ -8,5 +8,6 @@ urlpatterns = [
     path('solicitud/<int:id>/', views.specificSolicitude.as_view({'get': 'get'}), name='specificGet'),
     path('solicitud/', views.specificSolicitude.as_view({'post': 'post'}), name='specificPost'),
     path('products/', views.AllProducts.as_view({'get': 'get'}), name='products'),
+    path('addSolicitud/', views.addData.as_view({'post': 'solicitud'}), name='products'),
 
 ]

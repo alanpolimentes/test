@@ -14,3 +14,12 @@ SET FOREIGN_KEY_CHECKS=1;
 curl -i -X POST -H 'Content-Type: application/json' -d '{"id": "2"}' http://localhost:8000/solicitud/
 find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 find . -path "*/migrations/*.pyc"  -delete
+
+
+
+
+curl -i -X POST -H 'Content-Type: application/json' -d '{"nombre": "usuario4", "correo": "ususario4@correo.com", "products": { "jabon": 4, "deshodornte": 4, "xbox": 8}}' http://localhost:8000/addSolicitud/
+curl -i -X POST -H 'Content-Type: application/json' -d '{"nombre": "usuario4", "correo": "ususario4@correo.com", "products": { "articulo1": 4, "articulo2": 4, "articulo3": 4, "articulo4": 4, "articulo5": 4, "articulo6": 4}}' http://localhost:8000/addSolicitud/
+curl -i -X POST -H 'Content-Type: application/json' -d '{"nombre": "usuario5", "correo": "ususario5@correo.com", "products": { "articulo8": 4, "articulo2": 9, "articulo14": 4, "articulo7": 1, "articulo16": 10, "articulo6": 3}}' http://localhost:8000/addSolicitud/
+
+"products": { "jabon": 4, "deshodornte": 4, "xbox": 8}
