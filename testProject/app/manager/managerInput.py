@@ -77,13 +77,19 @@ class ManagerInput:
             new_product.save()
             return new_product
 
-    def addSolcitud(self, products, solicitante):
+    def addSolcitud(self, products_req, nombre_sol, correo_sol):
+        solicitante = self.addUser(nombre_sol, correo_sol)
+        list_products = []
+        for key in products_req:
+            tem_prod = self.addSemiRandProduct(key)
+            list_products.append({'prod': tem_prod, 'amount': products_req[key]})
         new_solicitude = Solicitud()
         new_solicitude.save()
         str_amount = ''
-        for product in products:
+        for product in list_products:
             new_solicitude.producto.add(product['prod'])
             str_amount = product['prod'].nombre + ':' + str(product['amount']) + ','
         new_solicitude.cantidad = str_amount
         new_solicitude.solicitante.add(solicitante)
         new_solicitude.save()
+        return new_solicitude
