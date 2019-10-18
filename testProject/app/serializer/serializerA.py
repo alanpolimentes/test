@@ -8,7 +8,30 @@ class testSerializer(serializers.Serializer):
     fieldC = serializers.CharField()
 
 
+class CategoriaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Categoria
+        fields = ['nombre']
+
+
+class MarcaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Marca
+        fields = ['nombre']
+
+
+class SubcategoriaSerializer(serializers.ModelSerializer):
+    categoria = CategoriaSerializer()
+
+    class Meta:
+        model = Subcategoria
+        fields = '__all__'
+
+
 class ProductoSerializer(serializers.ModelSerializer):
+    marca = MarcaSerializer()
+    subcategoria = SubcategoriaSerializer()
+
     class Meta:
         model = Producto
         fields = '__all__'

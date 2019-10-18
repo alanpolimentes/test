@@ -11,6 +11,6 @@ SET FOREIGN_KEY_CHECKS=1;
 
 
 
-curl -i -X POST -H 'Content-Type: application/json' -d '{"id": "9"}' http://localhost:8000/user/
+curl -i -X POST -H 'Content-Type: application/json' -d '{"id": "2"}' http://localhost:8000/solicitud/
 find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 find . -path "*/migrations/*.pyc"  -delete

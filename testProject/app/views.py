@@ -2,12 +2,13 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from django.views.generic import TemplateView
 from rest_framework.views import APIView
+from rest_framework import viewsets
 from app.serializer.serializerA import *
 from app.classTest.test import *
 from app.manager import *
 import random
-from django.core.mail import send_mail
 from django.http import Http404
+
 
 class Hi(TemplateView):
 
@@ -24,7 +25,7 @@ class firstPetition(APIView):
         return Response(value_ser.data)
 
 
-class allUsers(APIView):
+class allUsers(viewsets.ViewSet):
 
     def get(self, request, *args, **kwargs):
 
@@ -32,10 +33,9 @@ class allUsers(APIView):
         serializer = SolicitudSerializer(solicitudes, many=True)
 
         return Response(serializer.data)
-    # def post(self, request, *args, **kwargs):
 
 
-class specificUser(APIView):
+class specificUser(viewsets.ViewSet):
 
     def get(self, request, *args, **kwargs):
         id = kwargs['id']
@@ -45,16 +45,8 @@ class specificUser(APIView):
         calculated_data = man.calculateTotalSolicitud()
         if calculated_data is None:
             raise Http404
-        name = calculated_data['user']['nombre']
-        email = calculated_data['user']['correo']
         serializer = ResponseSolicitudSerializer(data={'solicitud': calculated_data})
         serializer.is_valid()
-        send_mail(
-            'Email Django',
-            'Gracias! ' + name + 'el costo es de ' + str(calculated_data['total']),
-            'testemaildjangopoli@gmail.com',
-            ['testemaildjangopoli@gmail.com'],
-        )
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
@@ -65,20 +57,12 @@ class specificUser(APIView):
         calculated_data = man.calculateTotalSolicitud()
         if calculated_data is None:
             raise Http404
-        name = calculated_data['user']['nombre']
-        email = calculated_data['user']['correo']
         serializer = ResponseSolicitudSerializer(data={'solicitud': calculated_data})
         serializer.is_valid()
-        send_mail(
-            'Email Django',
-            'Gracias! ' + name,
-            'testemaildjangopoli@gmail.com',
-            ['testemaildjangopoli@gmail.com'],
-        )
         return Response(serializer.data)
 
 
-class AllProducts(APIView):
+class AllProducts(viewsets.ViewSet):
 
     def get(self, request, *args, **kwargs):
         values = getProductsbyCat()
@@ -110,9 +94,10 @@ class pushData(TemplateView):
         }]
         test_values_productos = [
             {'prod': 'jabon', 'sub': 'higiene', 'precio': 20},
+            {'prod': 'jarabe', 'sub': 'medicina', 'precio': 200},
             {'prod': 'deshodorante', 'sub': 'higiene', 'precio': 25},
             {'prod': 'papas', 'sub': 'frituras', 'precio': 12},
-            {'prod': 'llanta', 'sub': 'accesorios', 'precio': 600},
+            {'prod': 'llanta', 'sub': 'refacciones', 'precio': 600},
             {'prod': 'volante', 'sub': 'accesorios', 'precio': 600},
             {'prod': 'adorno', 'sub': 'accesorios', 'precio': 600},
             {'prod': 'sopa', 'sub': 'enlatado', 'precio': 8},
@@ -156,12 +141,14 @@ class pushData(TemplateView):
             solicitante.save()
             solicitud = Solicitud(cantidad='8')
             solicitud.save()
-            solicitud.producto.add(list_model_productos[random.randint(0, 7)])
-            solicitud.producto.add(list_model_productos[random.randint(0, 7)])
-            solicitud.producto.add(list_model_productos[random.randint(0, 7)])
-            solicitud.producto.add(list_model_productos[random.randint(0, 7)])
-            solicitud.producto.add(list_model_productos[random.randint(0, 7)])
-            solicitud.producto.add(list_model_productos[random.randint(0, 7)])
+            solicitud.producto.add(list_model_productos[random.randint(0, 8)])
+            solicitud.producto.add(list_model_productos[random.randint(0, 8)])
+            solicitud.producto.add(list_model_productos[random.randint(0, 8)])
+            solicitud.producto.add(list_model_productos[random.randint(0, 8)])
+            solicitud.producto.add(list_model_productos[random.randint(0, 8)])
+            solicitud.producto.add(list_model_productos[random.randint(0, 8)])
+            solicitud.producto.add(list_model_productos[random.randint(0, 8)])
+            solicitud.producto.add(list_model_productos[random.randint(0, 8)])
             solicitud.solicitante.add(solicitante)
             str_cant = ''
             for product in solicitud.producto.all():

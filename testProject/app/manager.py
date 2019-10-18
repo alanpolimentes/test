@@ -1,6 +1,7 @@
 from app.models import *
 from app.serializer.serializerA import ProductoSerializer
 from django.forms.models import model_to_dict
+from django.core.mail import send_mail
 
 
 class manager:
@@ -33,9 +34,17 @@ class manager:
                 dict_products['prods'][product.nombre]['subcategoria'] = product.subcategoria.nombre
                 dict_products['prods'][product.nombre]['precio'] = product.precio
                 dict_products['total'] = dict_products['total'] + dict_products['prods'][product.nombre]['subtotal']
-
+        sendEmail(dict_products['user']['nombre'], dict_products['user']['correo'], dict_products['total'])
         return dict_products
 
+
+def sendEmail(name, email, total):
+    send_mail(
+        'Email Django',
+        'Gracias! ' + name + 'el costo es de ' + str(total),
+        'testemaildjangopoli@gmail.com',
+        ['testemaildjangopoli@gmail.com'],
+    )
 
 def getProductsbyCat():
     all_products = Producto.objects.all()
